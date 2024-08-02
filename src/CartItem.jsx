@@ -1,7 +1,10 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { removeItem, updateQuantity } from './CartSlice';
+//import { useState } from 'react';
 import './CartItem.css';
+
+//const [totalInCart, setTsotalInCart] = useState(0); 
 
 const CartItem = ({ onContinueShopping }) => {
   const cart = useSelector(state => state.cart.items);
@@ -9,27 +12,46 @@ const CartItem = ({ onContinueShopping }) => {
 
   // Calculate total amount for all products in the cart
   const calculateTotalAmount = () => {
- 
+    let total = 0; 
+    cart.forEach(element => {
+      let cost = parseInt(element.cost.slice(1));
+      total += cost * element.quantity; 
+    });
+    return total;
   };
 
   const handleContinueShopping = (e) => {
-   
+    onContinueShopping(e); 
   };
 
-
+  const handleCheckoutShopping = (e) => {
+    alert('Functionality to be added for future reference');
+  };
 
   const handleIncrement = (item) => {
+    //console.log("in handleIncement, item is: " + item.name);
+    dispatch(updateQuantity({name: [item.name], quantity: parseInt([item.quantity]) +1}));
+
   };
 
   const handleDecrement = (item) => {
+    if (item.quantity === 1) {
+      dispatch(removeItem(item.name)); 
+    }
+    else {
+      dispatch(updateQuantity({name: [item.name], quantity: parseInt([item.quantity])-1})); 
+    }
    
   };
 
   const handleRemove = (item) => {
+    dispatch(removeItem(item.name));  
   };
 
   // Calculate total cost based on quantity for an item
   const calculateTotalCost = (item) => {
+    let cost = parseInt(item.cost.slice(1));
+    return cost * item.quantity; 
   };
 
   return (
@@ -57,7 +79,7 @@ const CartItem = ({ onContinueShopping }) => {
       <div className="continue_shopping_btn">
         <button className="get-started-button" onClick={(e) => handleContinueShopping(e)}>Continue Shopping</button>
         <br />
-        <button className="get-started-button1">Checkout</button>
+        <button className="get-started-button1" onClick={handleCheckoutShopping}>Checkout</button>
       </div>
     </div>
   );
