@@ -10,7 +10,7 @@ export const CartSlice = createSlice({
     addItem: (state, action) => {
       const { name, image, cost } = action.payload;
       let found = state.items.find((itm) =>itm.name === name );
-      if (found) {
+      if (found) { //I think this is unreachable since the add to cart button becomes disabled after adding a plant, and updates are using the updatequanitity function and not this one
         found.quantity++; 
       }
       else {
@@ -27,9 +27,7 @@ export const CartSlice = createSlice({
       }
     },
     updateQuantity: (state, action) => {
-      let { name, quantity } = action.payload;
-      //console.log("name is: " + name + " type: " + typeof name);
-      name = JSON.stringify(name).replace(/[\[\]"]/g, ''); 
+      const { name, quantity } = action.payload;
       let found = state.items.find((itm) =>itm.name.trim() === name.trim() );
       if (found) {
         state.total = state.total -found.quantity + quantity;

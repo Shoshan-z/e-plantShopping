@@ -288,9 +288,18 @@ function ProductList() {
     setShowCart(false); // Hide the cart when navigating to About Us
   };
 
+  const cart = useSelector(state => state.cart.items);
+
   const handleContinueShopping = (e) => {
     e.preventDefault();
     setShowCart(false);
+    let newAddedToCart = {...addedToCart}; 
+    for (const [key, value] of Object.entries(addedToCart)) { //n^2 
+        if (!(cart.find((elem) => elem.name === key) )) {
+            newAddedToCart[key] = false;
+        }
+    }
+    setAddedToCart(newAddedToCart);    
   };
   const total = useSelector(state => state.cart.total);
   return (
@@ -342,7 +351,6 @@ function ProductList() {
                     id="mainIconPathAttribute"
                   ></path>
                 </svg>
-                {/* shoshan here */}
                 <span className="cart_quantity_count">{total}</span>
               </h1>
             </a>
@@ -363,7 +371,8 @@ function ProductList() {
                         <div className="product-title">{innerItm.name}</div>
                         <p>{innerItm.description}</p>
                         <p className="product-price">{innerItm.cost}</p>
-                        <button className="product-button" onClick={() => handleAddToCart(innerItm)}>Add To Cart</button>
+                        <button className={`product-button ${addedToCart[innerItm.name] ? 'added-to-cart' : ''}`} disabled={addedToCart[innerItm.name] === true} onClick={() => handleAddToCart(innerItm)}>Add To Cart</button>
+                        {/* disabled={addedToCart[innerItm.name] == undefined || addedToCart[innerItm.name]} */}
                       </div>
                     );
                   })}

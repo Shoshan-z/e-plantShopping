@@ -29,8 +29,7 @@ const CartItem = ({ onContinueShopping }) => {
   };
 
   const handleIncrement = (item) => {
-    //console.log("in handleIncement, item is: " + item.name);
-    dispatch(updateQuantity({name: [item.name], quantity: parseInt([item.quantity]) +1}));
+    dispatch(updateQuantity({name: item.name, quantity: parseInt(item.quantity) +1}));
 
   };
 
@@ -39,7 +38,7 @@ const CartItem = ({ onContinueShopping }) => {
       dispatch(removeItem(item.name)); 
     }
     else {
-      dispatch(updateQuantity({name: [item.name], quantity: parseInt([item.quantity])-1})); 
+      dispatch(updateQuantity({name: item.name, quantity: parseInt(item.quantity)-1})); 
     }
    
   };
